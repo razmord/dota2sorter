@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+ 
+<html>
+ 
+<head>
+ 
+<link rel="shortcut icon" href="https://i.imgur.com/s31zuFU.png">
+ 
+<meta charset="utf-8">
+ 
+<meta http-equiv="Content-Style-Type" content="text/css">
+ 
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+ 
+<script type="text/javascript">
+ 
+// Your list of things to sort follows. Be sure and wrap all media (images or videos) with the <span class='media-only'></span> tag so that the images and videos don’t show up in the final ranking list and mess things up for you visually!
+ 
+var namMember = [
+ 
+"Abaddon <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/abaddon.png\"></span>",
+"Alchemist <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/alchemist.png\"></span>",
+"Ancient Apparition <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/ancient_apparition.png\"></span>",
+"Anti-Mage <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/antimage.png\"></span>",
+"Arc Warden <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/arc_warden.png\"></span>",
+"Axe <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/axe.png\"></span>",
+"Bane <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/bane.png\"></span>",
+"Batrider <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/batrider.png\"></span>",
+"Beastmaster <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/beastmaster.png\"></span>",
+"Bloodseeker <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/bloodseeker.png\"></span>",
+"Bounty Hunter <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/bounty_hunter.png\"></span>",
+
+"Brewmaster <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/brewmaster.png\"></span>",
+"Bristleback <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/bristleback.png\"></span>",
+"Broodmother <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/broodmother.png\"></span>",
+"Centaur Warrunner <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/centaur.png\"></span>",
+"Chaos Knight <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/chaos_knight.png\"></span>",
+"Chen <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/chen.png\"></span>",
+"Clinkz <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/clinkz.png\"></span>",
+"Clockwerk <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/rattletrap.png\"></span>",
+"Crystal Maiden <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/crystal_maiden.png\"></span>",
+"Dark Seer <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/dark_seer.png\"></span>",
+"Dark Willow <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/dark_willow.png\"></span>",
+
+"Dawnbreaker <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/dawnbreaker.png\"></span>",
+"Dazzle <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/dazzle.png\"></span>",
+"Death Prophet <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/death_prophet.png\"></span>",
+"Disruptor <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/disruptor.png\"></span>",
+"Doom <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/doom_bringer.png\"></span>",
+"Dragon Knight <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/dragon_knight.png\"></span>",
+"Drow Ranger <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/drow_ranger.png\"></span>",
+"Earth Spirit <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/earth_spirit.png\"></span>",
+"Earthshaker <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/earthshaker.png\"></span>",
+"Elder Titan <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/elder_titan.png\"></span>",
+"Ember Spirit <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/ember_spirit.png\"></span>",
+
+"Enchantress <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/enchantress.png\"></span>",
+"Enigma <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/enigma.png\"></span>",
+"Faceless Void <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/faceless_void.png\"></span>",
+"Grimstroke <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/grimstroke.png\"></span>",
+"Gyrocopter <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/gyrocopter.png\"></span>",
+"Hoodwink <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/hoodwink.png\"></span>",
+"Huskar <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/huskar.png\"></span>",
+"Invoker <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/invoker.png\"></span>",
+"Io <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/wisp.png\"></span>",
+"Jakiro <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/jakiro.png\"></span>",
+"Juggernaut <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/juggernaut.png\"></span>",
+
+"Keeper of the Light <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/keeper_of_the_light.png\"></span>",
+"Kez <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/kez.png\"></span>",
+"Kunkka <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/kunkka.png\"></span>",
+"Legion Commander <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/legion_commander.png\"></span>",
+"Leshrac <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/leshrac.png\"></span>",
+"Lich <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/lich.png\"></span>",
+"Lifestealer <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/life_stealer.png\"></span>",
+"Lina <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/lina.png\"></span>",
+"Lion <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/lion.png\"></span>",
+"Lone Druid <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/lone_druid.png\"></span>",
+"Luna <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/luna.png\"></span>",
+
+"Lycan <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/lycan.png\"></span>",
+"Magnus <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/magnataur.png\"></span>",
+"Marci <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/marci.png\"></span>",
+"Mars <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/mars.png\"></span>",
+"Medusa <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/medusa.png\"></span>",
+"Meepo <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/meepo.png\"></span>",
+"Mirana <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/mirana.png\"></span>",
+"Monkey King <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/monkey_king.png\"></span>",
+"Morphling <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/morphling.png\"></span>",
+"Muerta <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/muerta.png\"></span>",
+"Naga Siren <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/naga_siren.png\"></span>",
+
+"Nature's Prophet <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/furion.png\"></span>",
+"Necrophos <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/necrolyte.png\"></span>",
+"Night Stalker <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/night_stalker.png\"></span>",
+"Nyx Assassin <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/nyx_assassin.png\"></span>",
+"Ogre Magi <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/ogre_magi.png\"></span>",
+"Omniknight <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/omniknight.png\"></span>",
+"Oracle <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/oracle.png\"></span>",
+"Outworld Destroyer <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/obsidian_destroyer.png\"></span>",
+"Pangolier <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/pangolier.png\"></span>",
+"Phantom Assassin <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/phantom_assassin.png\"></span>",
+"Phantom Lancer <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/phantom_lancer.png\"></span>",
+
+"Phoenix <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/phoenix.png\"></span>",
+"Primal Beast <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/primal_beast.png\"></span>",
+"Puck <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/puck.png\"></span>",
+"Pudge <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/pudge.png\"></span>",
+"Pugna <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/pugna.png\"></span>",
+"Queen of Pain <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/queenofpain.png\"></span>",
+"Razor <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/razor.png\"></span>",
+"Riki <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/riki.png\"></span>",
+"Ringmaster <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/ringmaster.png\"></span>",
+"Rubick <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/rubick.png\"></span>",
+"Sand King <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/sand_king.png\"></span>",
+
+"Shadow Demon <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/shadow_demon.png\"></span>",
+"Shadow Fiend <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/nevermore.png\"></span>",
+"Shadow Shaman <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/shadow_shaman.png\"></span>",
+"Silencer <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/silencer.png\"></span>",
+"Skywrath Mage <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/skywrath_mage.png\"></span>",
+"Slardar <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/slardar.png\"></span>",
+"Slark <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/slark.png\"></span>",
+"Snapfire <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/snapfire.png\"></span>",
+"Sniper <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/sniper.png\"></span>",
+"Spectre <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/spectre.png\"></span>",
+"Spirit Breaker <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/spirit_breaker.png\"></span>",
+
+"Storm Spirit <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/storm_spirit.png\"></span>",
+"Sven <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/sven.png\"></span>",
+"Techies <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/techies.png\"></span>",
+"Templar Assassin <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/templar_assassin.png\"></span>",
+"Terrorblade <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/terrorblade.png\"></span>",
+"Tidehunter <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/tidehunter.png\"></span>",
+"Timbersaw <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/shredder.png\"></span>",
+"Tinker <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/tinker.png\"></span>",
+"Tiny <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/tiny.png\"></span>",
+"Treant Protector <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/treant.png\"></span>",
+"Troll Warlord <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/troll_warlord.png\"></span>",
+
+"Tusk <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/tusk.png\"></span>",
+"Underlord <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/abyssal_underlord.png\"></span>",
+"Undying <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/undying.png\"></span>",
+"Ursa <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/ursa.png\"></span>",
+"Vengeful Spirit <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/vengefulspirit.png\"></span>",
+"Venomancer <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/venomancer.png\"></span>",
+"Viper <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/viper.png\"></span>",
+"Visage <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/visage.png\"></span>",
+"Void Spirit <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/void_spirit.png\"></span>",
+"Warlock <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/warlock.png\"></span>",
+"Weaver <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/weaver.png\"></span>",
+
+"Windranger <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/windrunner.png\"></span>",
+"Winter Wyvern <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/winter_wyvern.png\"></span>",
+"Witch Doctor <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/witch_doctor.png\"></span>",
+"Wraith King <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/skeleton_king.png\"></span>",
+"Zeus <br /><span class='media-only'><img width=\"100px\" src=\"https://cdn.steamstatic.com/apps/dota2/images/dota_react/heroes/zuus.png\"></span>"
+
+
+
+
+ 
+];
+ 
+ 
+ 
+//*********************************************************
+ 
+ 
+ 
+var lstMember = new Array();
+ 
+var parent = new Array();
+ 
+var equal = new Array();
+ 
+var rec = new Array();
+ 
+var cmp1,cmp2;
+ 
+var head1,head2;
+ 
+var nrec;
+ 
+ 
+ 
+var numQuestion;
+ 
+var totalSize;
+ 
+var finishSize;
+ 
+var finishFlag;
+ 
+ 
+ 
+//The initialization of the variable+++++++++++++++++++++++++++++++++++++++++++++
+ 
+function initList(){
+ 
+var n = 0;
+ 
+var mid;
+ 
+var i;
+ 
+ 
+ 
+//The sequence that you should sort
+ 
+lstMember[n] = new Array();
+ 
+for (i=0; i<namMember.length; i++) {
+ 
+lstMember[n][i] = i;
+ 
+}
+ 
+parent[n] = -1;
+ 
+totalSize = 0;
+ 
+n++;
+ 
+ 
+ 
+for (i=0; i<lstMember.length; i++) {
+ 
+//And element divides it in two/more than two
+ 
+//Increase divided sequence of last in first member
+ 
+if(lstMember[i].length>=2) {
+ 
+mid = Math.ceil(lstMember[i].length/2);
+ 
+lstMember[n] = new Array();
+ 
+lstMember[n] = lstMember[i].slice(0,mid);
+ 
+totalSize += lstMember[n].length;
+ 
+parent[n] = i;
+ 
+n++;
+ 
+lstMember[n] = new Array();
+ 
+lstMember[n] = lstMember[i].slice(mid,lstMember[i].length);
+ 
+totalSize += lstMember[n].length;
+ 
+parent[n] = i;
+ 
+n++;
+ 
+}
+ 
+}
+ 
+ 
+ 
+//Preserve this sequence
+ 
+for (i=0; i<namMember.length; i++) {
+ 
+rec[i] = 0;
+ 
+}
+ 
+nrec = 0;
+ 
+ 
+ 
+//List that keeps your results
+ 
+//Value of link initial
+ 
+// Value of link initial
+ 
+for (i=0; i<=namMember.length; i++) {
+ 
+equal[i] = -1;
+ 
+}
+ 
+ 
+ 
+cmp1 = lstMember.length-2;
+ 
+cmp2 = lstMember.length-1;
+ 
+head1 = 0;
+ 
+head2 = 0;
+ 
+numQuestion = 1;
+ 
+finishSize = 0;
+ 
+finishFlag = 0;
+ 
+}
+ 
+ 
+ 
+//&#12522;&#12473;&#12488;&#12398;&#12477;&#12540;&#12488;+++++++++++++++++++++++++++++++++++++++++++
+ 
+//flag&#65306;Don't know characters
+ 
+// -1&#65306;Chose the left
+ 
+// 0&#65306;Tie
+ 
+// 1&#65306;Chose the right
+ 
+function sortList(flag){
+ 
+var i;
+ 
+var str;
+ 
+ 
+ 
+//rec preservation
+ 
+if (flag<0) {
+ 
+rec[nrec] = lstMember[cmp1][head1];
+ 
+head1++;
+ 
+nrec++;
+ 
+finishSize++;
+ 
+while (equal[rec[nrec-1]]!=-1) {
+ 
+rec[nrec] = lstMember[cmp1][head1];
+ 
+head1++;
+ 
+nrec++;
+ 
+finishSize++;
+ 
+}
+ 
+}
+ 
+else if (flag>0) {
+ 
+rec[nrec] = lstMember[cmp2][head2];
+ 
+head2++;
+ 
+nrec++;
+ 
+finishSize++;
+ 
+while (equal[rec[nrec-1]]!=-1) {
+ 
+rec[nrec] = lstMember[cmp2][head2];
+ 
+head2++;
+ 
+nrec++;
+ 
+finishSize++;
+ 
+}
+ 
+}
+ 
+else {
+ 
+rec[nrec] = lstMember[cmp1][head1];
+ 
+head1++;
+ 
+nrec++;
+ 
+finishSize++;
+ 
+while (equal[rec[nrec-1]]!=-1) {
+ 
+rec[nrec] = lstMember[cmp1][head1];
+ 
+head1++;
+ 
+nrec++;
+ 
+finishSize++;
+ 
+}
+ 
+equal[rec[nrec-1]] = lstMember[cmp2][head2];
+ 
+rec[nrec] = lstMember[cmp2][head2];
+ 
+head2++;
+ 
+nrec++;
+ 
+finishSize++;
+ 
+while (equal[rec[nrec-1]]!=-1) {
+ 
+rec[nrec] = lstMember[cmp2][head2];
+ 
+head2++;
+ 
+nrec++;
+ 
+finishSize++;
+ 
+}
+ 
+}
+ 
+ 
+ 
+//Processing after finishing with one list
+ 
+if (head1<lstMember[cmp1].length && head2==lstMember[cmp2].length) {
+ 
+//List the remainder of cmp2 copies, list cmp1 copies when finished scanning
+ 
+while (head1<lstMember[cmp1].length){
+ 
+rec[nrec] = lstMember[cmp1][head1];
+ 
+head1++;
+ 
+nrec++;
+ 
+finishSize++;
+ 
+}
+ 
+}
+ 
+else if (head1==lstMember[cmp1].length && head2<lstMember[cmp2].length) {
+ 
+//List the remainder of cmp1 copies, list cmp2 copies when finished scanning
+ 
+while (head2<lstMember[cmp2].length){
+ 
+rec[nrec] = lstMember[cmp2][head2];
+ 
+head2++;
+ 
+nrec++;
+ 
+finishSize++;
+ 
+}
+ 
+}
+ 
+ 
+ 
+//When it arrives at the end of both lists
+ 
+//Update a pro list
+ 
+if (head1==lstMember[cmp1].length && head2==lstMember[cmp2].length) {
+ 
+for (i=0; i<lstMember[cmp1].length+lstMember[cmp2].length; i++) {
+ 
+lstMember[parent[cmp1]][i] = rec[i];
+ 
+}
+ 
+lstMember.pop();
+ 
+lstMember.pop();
+ 
+cmp1 = cmp1-2;
+ 
+cmp2 = cmp2-2;
+ 
+head1 = 0;
+ 
+head2 = 0;
+ 
+ 
+ 
+//Initialize the rec before performing the new comparison
+ 
+if (head1==0 && head2==0) {
+ 
+for (i=0; i<namMember.length; i++) {
+ 
+rec[i] = 0;
+ 
+}
+ 
+nrec = 0;
+ 
+}
+ 
+}
+ 
+ 
+ 
+if (cmp1<0) {
+ 
+str = "Battle #"+(numQuestion-1)+"<br>"+Math.floor(finishSize*100/totalSize)+"% sorted.";
+ 
+document.getElementById("battleNumber").innerHTML = str;
+ 
+ 
+ 
+showResult();
+ 
+finishFlag = 1;
+ 
+}
+ 
+else {
+ 
+showImage();
+ 
+}
+ 
+}
+ 
+ 
+//The results+++++++++++++++++++++++++++++++++++++++++++++++
+ 
+//&#38918;&#20301;=Rank/Grade/Position/Standing/Status
+ 
+//&#21517;&#21069;=Identification term
+ 
+function showResult() {
+ 
+var ranking = 1;
+ 
+var sameRank = 1;
+ 
+var str = "";
+ 
+var i;
+ 
+// Inject style to hide media-only class in result display
+  str += `
+    <style>
+      #resultField .media-only {
+        display: none !important;
+      }
+    </style>
+  `;
+ 
+  // Begin table layout
+ 
+str += `
+    <table style="width:200px; font-size: 1.1rem; line-height: 1.3; margin-left:auto; margin-right:auto; border:1px solid #000; border-collapse:collapse" align="center">
+      <tr>
+        <td style="color:#ffffff; background-color:#000; text-align:center;">Rank</td>
+        <td style="color:#ffffff; background-color:#000; text-align:center;">Song</td>
+      </tr>
+  `;
+ 
+ 
+for (i=0; i<namMember.length; i++) {
+ 
+str += "<tr><td style=\"border:1px solid #000; text-align:center; padding-right:5px;\">"+ranking+"<\/td><td style=\"border:1px solid #000; padding-left:5px;\">"+namMember[lstMember[0][i]]+"<\/td><\/tr>";
+ 
+// Handle tied rankings
+    if (i < namMember.length - 1) {
+      if (equal[lstMember[0][i]] === lstMember[0][i + 1]) {
+        sameRank++;
+      } else {
+        ranking += sameRank;
+        sameRank = 1;
+ 
+}
+ 
+}
+ 
+}
+ 
+str += "<\/table>";
+ 
+ 
+ 
+document.getElementById("resultField").innerHTML = str;
+ 
+}
+ 
+ 
+//Indicates two elements to compare+++++++++++++++++++++++++++++++++++
+ 
+function showImage() {
+ 
+var str0 = "Battle #"+numQuestion+"<br>"+Math.floor(finishSize*100/totalSize)+"% sorted.";
+ 
+var str1 = ""+toNameFace(lstMember[cmp1][head1]);
+ 
+var str2 = ""+toNameFace(lstMember[cmp2][head2]);
+ 
+ 
+ 
+document.getElementById("battleNumber").innerHTML = str0;
+ 
+document.getElementById("leftField").innerHTML = str1;
+ 
+document.getElementById("rightField").innerHTML = str2;
+ 
+ 
+ 
+numQuestion++;
+ 
+}
+ 
+ 
+ 
+//Convert numeric value into a name (emoticon)+++++++++++++++++++++++++++++++
+ 
+function toNameFace(n){
+ 
+var str = namMember[n];
+ 
+/*
+ 
+str += '<br />';
+ 
+switch(n) {
+ 
+//case -1 Because it is a sample, delete it
+ 
+case -1: str+=""; break;
+ 
+}*/
+ 
+return str;
+ 
+}
+ 
+//-->
+ 
+</script>
+ 
+<style type="text/css">
+ 
+.page-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+}
+ 
+.header-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+ 
+#mainTable{
+ 
+font-size: 1.1rem;
+line-height: 1.3;
+text-align: center;
+width: 100%;
+table-layout: fixed;
+max-width: 410px;
+margin-left: auto;
+margin-right: auto;
+border-collapse: separate;
+border-spacing: 5px 3px;
+ 
+}
+ 
+#mainTable td {
+  vertical-align: middle;
+}
+ 
+ 
+#leftField, #rightField {
+  width: 40%;
+  max-width: 120px;
+  height: auto;
+  max-height: 150px;
+  aspect-ratio: 3 / 4;
+  border: 1px solid #000;
+  cursor: pointer;
+  word-wrap: break-word;
+  box-sizing: border-box;
+  overflow: visible;
+ 
+}
+ 
+.middleField{
+ 
+  width: 20%;
+  height: auto;
+  padding: 0.5em;
+  border: 1px solid #000;
+  cursor: pointer;
+ 
+}
+ 
+body {
+ 
+width: 90%;
+max-width: 800px;
+margin: 0 auto;
+font-family: 'Josefin Slab', serif;
+font-size: 1.1rem;
+line-height: 1.3;
+ 
+}
+ 
+a:link {
+  color: #FF69B4; /* default link color */
+  text-decoration: none;
+}
+ 
+a:visited {
+  color: #D80065; /* color after link has been clicked */
+}
+ 
+a:hover {
+  color: #800020; /* color on hover */
+  text-decoration: underline; /* optional */
+}
+ 
+a:active {
+  color: #FAF9F6; /* color while actively clicking */
+}
+ 
+/* media query */
+@media (max-width: 600px) {
+  #mainTable {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+ 
+  #leftField, #rightField, .middleField {
+    width: 90% !important;
+    max-width: 100%;
+    margin-bottom: 10px;
+  }
+ 
+  .middleField {
+    order: 1;
+  }
+}
+/* end media query */
+ 
+</style>
+ 
+<!-- BEGIN TUMBLR FACEBOOK OPENGRAPH TAGS --><!-- If you'd like to specify your own Open Graph tags, define the og:url and og:title tags in your theme's HTML. --><!-- Read more: http://ogp.me/ --><meta property="fb:app_id" content="48119224995" /><meta property="og:site_name" content="" /><meta property="og:title" content="Custom Sorter" /><meta property="og:url" content="" /><meta property="og:description" content="A custom sorter page hosted on Tumblr. Rank your favorites!" /><meta property="og:determiner" content="a" /><meta property="og:type" content="tumblr-feed:entry" /><meta property="og:image" content="https://assets.tumblr.com/images/og/text_200.png" /><!-- END TUMBLR FACEBOOK OPENGRAPH TAGS -->
+ 
+<!-- TWITTER TAGS --><meta charset="utf-8"><meta name="twitter:card" content="summary" /><meta name="twitter:description" content="A custom sorter page hosted on Tumblr. Rank your favorites!" /><meta name="twitter:title" content="Custom Sorter" /><meta name="twitter:site" content="tumblr" /><!-- END TWITTER TAGS -->
+ 
+<script src="https://assets.tumblr.com/assets/scripts/tumblelog.js?_v=a9e2d0b0ade5958a1a2a936adf448061"></script>
+<meta http-equiv="x-dns-prefetch-control" content="off"/>
+<script
+    defer
+    type="application/javascript"
+    id="bilmur"
+    data-provider="tumblr.com"
+    data-service="blognetwork"
+    data-customproperties='{"theme": ""}'
+    nonce="lgRBTXw8nI5bHCXrFSIJFDpBTA"
+    src="https://s0.wp.com/wp-content/js/bilmur.min.js?m=202431"
+  ></script>
+ 
+<script src="https://assets.tumblr.com/assets/scripts/tumblelog_post_message_queue.js?_v=a8fadfa499d8cb7c3f8eefdf0b1adfdd"></script>
+<link rel="stylesheet" type="text/css" href="https://assets.tumblr.com/fonts/calluna/stylesheet.css?v=3"></head>
+<link href="https://fonts.googleapis.com/css?family=Josefin+Slab:400,600,700&display=swap" rel="stylesheet">
+ 
+<body text="#F4D4DC" bgcolor="#000000" link="#0099ff" vlink="#0099ff" alink="#0099ff"> <div class="page-wrap">
+ 
+<p class="instructions">
+<center><img src="https://cdn.steamstatic.com/apps/dota2/images/dota2_social.jpg" class="header-img"><br /><br /><b>Welcome to the Dota 2 sorter!</b><br /><br />Pick the option you like better in each battle to get an accurate list of your favorites. Have fun and choose wisely!<br /><br />Note: hitting 'no opinion' or 'I like both' frequently will give you a whole lot of ties.<br /><br /></center>
+ 
+</p>
+ 
+<table id="mainTable" align="center">
+ 
+<tbody><tr>
+ 
+<td id="battleNumber" colspan="3" style="padding-bottom: 10px; text-align:center;">
+ 
+<b>Battle #1<br>0% sorted.</b></td>
+ 
+</tr>
+ 
+<tr>
+ 
+<td id="leftField" onclick="if(finishFlag==0) sortList(-1);" rowspan="2" style="text-align:center;"></td>
+ 
+<td class="middleField" onclick="if(finishFlag==0) sortList(0);" style="text-align:center;">
+ 
+I Like Both
+ 
+</td>
+ 
+<td id="rightField" onclick="if(finishFlag==0) sortList(1);" rowspan="2"style="text-align:center;"></td>
+ 
+</tr>
+ 
+<tr>
+ 
+<td class="middleField" onclick="if(finishFlag==0) sortList(0);"style="text-align:center;">
+ 
+No Opinion
+ 
+</td>
+ 
+</tr>
+ 
+</tbody>
+ 
+</table>
+ 
+<br><br>
+ 
+<div id="resultField" style="text-align: center;">
+ 
+<br></div>
+ 
+<script type="text/javascript">
+ 
+//
+ 
+initList();
+ 
+showImage();
+ 
+</script>
+<p class="other">
+<center><small>A big thanks to mostlypoptarts, roosterteethcs, jesseepinkman, and yvesdot.</center></small>
+</p>
+ 
+<!-- BEGIN TUMBLR CODE -->
+ 
+<!--[if IE]>
+  <script type="text/javascript">
+    document.getElementById('ga_target').allowTransparency = true;
+  </script>
+<![endif]-->
+ 
+<iframe onload="javascript:this.contentWindow.postMessage(['tick_google_analytics', '/ask?route=404_page'].join(';'), this.src.split('/analytics.html')[0]);  COMSCORE = true;this.contentWindow.postMessage('enable_comscore;' + window.location, this.src.split('/analytics.html')[0]);" src="https://assets.tumblr.com/analytics.html" scrolling="no" width="1" height="1" frameborder="0" style="background-color:transparent; overflow:hidden; position:absolute; top:0; left:0; z-index:9999;" id="ga_target"></iframe>
+ 
+<!-- END TUMBLR CODE -->
+ 
+</div></body></html>
